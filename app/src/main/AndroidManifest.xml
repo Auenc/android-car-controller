@@ -32,6 +32,11 @@
         <activity
             android:name=".Lobby"
             android:label="@string/title_activity_lobby"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".Controller"
+            android:label="@string/title_activity_controller"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

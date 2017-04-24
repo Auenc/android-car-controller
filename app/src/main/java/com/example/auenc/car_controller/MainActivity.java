@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
                 if(mPlayerName == null){
                     Toast.makeText(MainActivity.this, "Please enter a username", Toast.LENGTH_SHORT).show();
                 }
-                final ControllerValues controllerValues = new ControllerValues(MainActivity.this, MainActivity.this);
+
 
                askForServerAddress();
             }
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
         intent.putExtra("player-color", mPlayerColor);
         startActivity(intent);
     }
+
 
     public String getPlayerName(){
         return mPlayerName;

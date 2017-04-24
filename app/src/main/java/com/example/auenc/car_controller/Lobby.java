@@ -1,5 +1,6 @@
 package com.example.auenc.car_controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,7 +23,7 @@ public class Lobby extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mConnection = Connection.getConnection();
-
+        mConnection.setInLobby(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,4 +55,10 @@ public class Lobby extends AppCompatActivity {
         playerColor.setText(mPlayerColor);
     }
 
+
+    public void startGame(){
+        Intent intent = new Intent(Lobby.this, Controller.class);
+        intent.putExtra("color", mPlayerColor);
+        startActivity(intent);
+    }
 }

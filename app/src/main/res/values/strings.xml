@@ -4,4 +4,7 @@
     <string name="playername">Player Name</string>
     <string name="color">Car Colour</string>
     <string name="title_activity_lobby">Lobby</string>
+    <string name="title_activity_controller">Controller</string>
+    <string name="breakText">Break</string>
+    <string name="throttleText">Throttle</string>
 </resources>

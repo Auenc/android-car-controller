@@ -20,6 +20,12 @@ public class Connection {
 
     private MainActivity mMain;
 
+    private int mID;
+
+    private Lobby mLobby;
+
+    boolean inLobby;
+
     private Connection(){
 
     }
@@ -37,7 +43,9 @@ public class Connection {
             }).on("login", new Emitter.Listener(){
                 @Override
                 public void call(Object... args) {
-                    System.out.println("Got login");
+                    System.out.println("Got login " +  args.length);
+                    if(args.length < 1)return;
+                    mID = (int) args[0];
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("name", mMain.getPlayerName());
@@ -46,7 +54,7 @@ public class Connection {
                         e.printStackTrace();
                     }
 
-                    mSocket.emit("login", obj);
+                    mSocket.emit("login", mID, obj);
 
                     System.out.println("Join sent");
                 }
@@ -61,6 +69,14 @@ public class Connection {
                     mMain.setPlayerColor(color);
                     mMain.enterLobby();
                 }
+            }).on("start-game", new Emitter.Listener(){
+                @Override
+                public void call(Object... args) {
+                    System.out.println("APP: start-game called");
+                    if(inLobby){
+                        mLobby.startGame();
+                    }
+                }
             });
             mSocket.connect();
         } catch (URISyntaxException e) {
@@ -68,16 +84,29 @@ public class Connection {
         }
     }
 
+    public void setInLobby(Lobby lob){
+        this.inLobby = true;
+        mLobby = lob;
+    }
+
     public void ready(){
-        mSocket.emit("ready");
+        mSocket.emit("ready", mID);
     }
 
     public void unready(){
-        mSocket.emit("unready");
+        mSocket.emit("unready", mID);
     }
 
-    private void login(){
-
+    public void updateState(double x, boolean breaking, boolean throttling){
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("x", x);
+            obj.put("breaking", breaking);
+            obj.put("throttling", throttling);
+            mSocket.emit("update-state", mID, obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Connection getConnection(){
