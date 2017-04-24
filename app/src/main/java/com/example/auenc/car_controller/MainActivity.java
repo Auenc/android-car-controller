@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
         startActivity(intent);
     }
 
+    public String getServerAddress(){
+        return mServerAddress;
+    }
 
     public String getPlayerName(){
         return mPlayerName;

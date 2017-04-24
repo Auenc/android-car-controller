@@ -33,7 +33,7 @@ public class Connection {
     public void connect(MainActivity main){
         mMain = main;
         try {
-             mSocket = IO.socket("http://192.168.0.43:3082");
+             mSocket = IO.socket("http://"+mMain.getServerAddress()+":3082");
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
                 @Override
                 public void call(Object... args) {
