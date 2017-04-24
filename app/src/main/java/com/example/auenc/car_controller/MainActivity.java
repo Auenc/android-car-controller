@@ -38,7 +38,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements ControllerValues.ControllerValueHandler {
     private ProgressBar mSpinner;
     private String mServerAddress;
     private String mPlayerName;
@@ -59,18 +59,7 @@ public class MainActivity extends AppCompatActivity  {
                 if(mPlayerName == null){
                     Toast.makeText(MainActivity.this, "Please enter a username", Toast.LENGTH_SHORT).show();
                 }
-                final ControllerValues controllerValues = new ControllerValues(MainActivity.this);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while(true==true) {
-                                Double x = controllerValues.getPitch();
-                                System.out.println(x);
-                            }
-                        }
-                    }).start();
-
+                final ControllerValues controllerValues = new ControllerValues(MainActivity.this, MainActivity.this);
 
                askForServerAddress();
             }
@@ -165,7 +154,14 @@ public class MainActivity extends AppCompatActivity  {
 
         builder.show();
     }
-
+    public void setPlayerName(final String name) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mNameView.setText(name);
+            }
+        });
+    }
 
     public void connectToServer(){
         mSpinner.setVisibility(View.VISIBLE);
@@ -195,4 +191,8 @@ public class MainActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void acceptPitch(Double pitch) {
+        setPlayerName(pitch.toString());
+    }
 }

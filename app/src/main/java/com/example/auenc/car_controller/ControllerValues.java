@@ -25,10 +25,11 @@ public class ControllerValues implements SensorEventListener {
     private float[] mGeomagnetic = new float[3];
     private final Sensor mAccelerometer;
     private double pitch;
-    public ControllerValues(Context context) {
+    private ControllerValueHandler handler;
+    public ControllerValues(Context context, ControllerValueHandler handler) {
 
         this.context = context;
-
+        this.handler = handler;
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -54,10 +55,11 @@ public class ControllerValues implements SensorEventListener {
             if (success) {
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
-                System.out.printf("a%f, p%f, r%f \n", Math.toDegrees(orientation[0]), Math.toDegrees(orientation[1]), Math.toDegrees(orientation[2]));
+                //System.out.printf("a%f, p%f, r%f \n", Math.toDegrees(orientation[0]), Math.toDegrees(orientation[1]), Math.toDegrees(orientation[2]));
                 pitch = Math.toDegrees(orientation[1]);
+                handler.acceptPitch(pitch);
             } else {
-                System.out.println(Arrays.toString(mGravity) + Arrays.toString(mGeomagnetic));
+                //System.out.println(Arrays.toString(mGravity) + Arrays.toString(mGeomagnetic));
             }
         }
     }
@@ -73,5 +75,8 @@ public class ControllerValues implements SensorEventListener {
         mSensorManager.getOrientation(rotationMatrix, orientationAngles);
 
         // "mOrientationAngles" now has up-to-date information.
+    }
+    public interface ControllerValueHandler {
+        void acceptPitch(Double pitch);
     }
 }
