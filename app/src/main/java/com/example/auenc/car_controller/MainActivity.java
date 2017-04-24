@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,19 @@ public class MainActivity extends AppCompatActivity  {
                 if(mPlayerName == null){
                     Toast.makeText(MainActivity.this, "Please enter a username", Toast.LENGTH_SHORT).show();
                 }
+                final ControllerValues controllerValues = new ControllerValues(MainActivity.this);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(true==true) {
+                                Double x = controllerValues.getPitch();
+                                System.out.println(x);
+                            }
+                        }
+                    }).start();
+
+
                askForServerAddress();
             }
         });
