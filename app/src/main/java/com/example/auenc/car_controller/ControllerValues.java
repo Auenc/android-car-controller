@@ -61,7 +61,7 @@ public class ControllerValues implements SensorEventListener {
                 if(pitch > MAXTURNS) {
                     pitch = MAXTURNS;
                 } else if(pitch < -MAXTURNS) {
-                    pitch = MAXTURNS;
+                    pitch = -MAXTURNS;
                 }
                 handler.acceptPitch(-pitch); //invert values by default
             } else {
