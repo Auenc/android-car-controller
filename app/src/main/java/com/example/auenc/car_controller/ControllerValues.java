@@ -25,6 +25,7 @@ public class ControllerValues implements SensorEventListener {
     private float[] mGeomagnetic = new float[3];
     private final Sensor mAccelerometer;
     private double pitch;
+    private final int MAXTURNS = 10;
     private ControllerValueHandler handler;
     public ControllerValues(Context context, ControllerValueHandler handler) {
 
@@ -56,8 +57,13 @@ public class ControllerValues implements SensorEventListener {
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
                 //System.out.printf("a%f, p%f, r%f \n", Math.toDegrees(orientation[0]), Math.toDegrees(orientation[1]), Math.toDegrees(orientation[2]));
-                pitch = Math.toDegrees(orientation[1]);
-                handler.acceptPitch(pitch);
+                pitch = Math.toDegrees(orientation[1])/2; //divided by 2 to make half as powerful
+                if(pitch > MAXTURNS) {
+                    pitch = MAXTURNS;
+                } else if(pitch < -MAXTURNS) {
+                    pitch = MAXTURNS;
+                }
+                handler.acceptPitch(-pitch); //invert values by default
             } else {
                 //System.out.println(Arrays.toString(mGravity) + Arrays.toString(mGeomagnetic));
             }
