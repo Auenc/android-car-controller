@@ -1,12 +1,14 @@
 package com.example.auenc.car_controller;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class Lobby extends AppCompatActivity {
@@ -24,8 +26,8 @@ public class Lobby extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mConnection = Connection.getConnection();
         mConnection.setInLobby(this);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Switch readySwitch = (Switch) findViewById(R.id.btnReady);
+        readySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!mReady){
@@ -33,11 +35,15 @@ public class Lobby extends AppCompatActivity {
                     mConnection.ready();
                     Snackbar.make(view, "You are now ready", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.rev);
+                    mp.start();
                 }else{
                     mReady = false;
                     mConnection.unready();
                     Snackbar.make(view, "You are now not ready", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.stop);
+                    mp.start();
                 }
 
             }
@@ -53,6 +59,8 @@ public class Lobby extends AppCompatActivity {
         System.out.println("APP: player name is " + mPlayerName);
         TextView playerColor = (TextView) findViewById(R.id.lobbyPlayerColor);
         playerColor.setText(mPlayerColor);
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.vroom);
+        mp.start();
     }
 
 

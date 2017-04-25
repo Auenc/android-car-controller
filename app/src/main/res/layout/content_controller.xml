@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.auenc.car_controller.Controller"
     tools:showIn="@layout/activity_controller">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-        <Button
-            android:id="@+id/btnBreak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/breakText"
-            android:layout_alignParentLeft="true"
-            android:textSize="@dimen/controllerButtonText"
-            />
-        <Button
-            android:id="@+id/btnThrottle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/throttleText"
-            android:textSize="@dimen/controllerButtonText"
-            android:layout_alignParentRight="true"
-            />
-    </RelativeLayout>
+    <Button
+        android:id="@+id/btnBreak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_weight="1"
+        android:background="@android:color/holo_blue_dark"
+        android:text="@string/breakText"
+        android:textSize="@dimen/controllerButtonText" />
+
+    <Button
+        android:id="@+id/btnThrottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_weight="1"
+        android:background="@android:color/holo_blue_dark"
+        android:text="@string/throttleText"
+        android:textSize="@dimen/controllerButtonText" />
 
 
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

@@ -1,10 +1,18 @@
 package com.example.auenc.car_controller;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +20,7 @@ import android.text.InputType;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
     private String mPlayerName;
     private String mPlayerColor;
     private TextView mNameView;
+    private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +73,13 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
 
                askForServerAddress();
             }
+        });*/
+        Button startGame = (Button) findViewById(R.id.btnStartGame);
+        startGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadGame();
+            }
         });
 
 
@@ -70,16 +87,77 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
         mSpinner.setVisibility(View.GONE);
 
         //Setting event handler for changing name
-        mNameView = (TextView) findViewById(R.id.playerName);
-        mNameView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePlayerName();
-            }
-        });
+        //mNameView = (TextView) findViewById("steve");
+        //mNameView.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+                //changePlayerName();
+            //}
+        //});
 
     }
+    public void loadGame() {
+        //get player name
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+        c.moveToFirst();
+        mPlayerName = c.getString(c.getColumnIndex("display_name"));
+        Toast.makeText(MainActivity.this, "Welcome, "+ c.getString(c.getColumnIndex("display_name")), Toast.LENGTH_SHORT).show();
+        c.close();
+        //get server address
+        askForServerAddress();
+        //enter lobby with these details
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
     public void enterLobby(){
         Intent intent = new Intent(MainActivity.this, Lobby.class);
         intent.putExtra("player-name", mPlayerName);
@@ -109,6 +187,9 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
 
         // Set up the input
         final EditText input = new EditText(this);
+        SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+
+        input.setText(sharedPref.getString("previousServer",""));
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
@@ -118,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mServerAddress = input.getText().toString();
+                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("previousServer", mServerAddress);
+                editor.commit();
                 connectToServer();
             }
         });

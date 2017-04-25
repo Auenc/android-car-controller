@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/playerName"
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.36"
+        android:adjustViewBounds="false"
+        android:background="@android:color/holo_blue_light"
+        android:cropToPadding="false"
+        app:srcCompat="@drawable/terrilogo" />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/playername"
         android:layout_gravity="center"
-        android:textSize="63dp"
-        />
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:progressTint="@android:color/background_light"
+        android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+    <Button
+        android:id="@+id/btnStartGame"
+        android:layout_width="match_parent"
+        android:layout_height="99dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:elevation="0dp"
+        android:fontFamily="sans-serif"
+        android:text="Start game"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"
+        android:typeface="normal" />
 
-    </LinearLayout>
+</LinearLayout>
 
