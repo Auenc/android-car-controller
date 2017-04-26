@@ -124,11 +124,17 @@ public class MainActivity extends AppCompatActivity implements ControllerValues.
                 // result of the request.
             }
         }
-        Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-        c.moveToFirst();
-        mPlayerName = c.getString(c.getColumnIndex("display_name"));
-        Toast.makeText(MainActivity.this, "Welcome, "+ c.getString(c.getColumnIndex("display_name")), Toast.LENGTH_SHORT).show();
-        c.close();
+        try {
+            Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+
+            c.moveToFirst();
+            mPlayerName = c.getString(c.getColumnIndex("display_name"));
+            Toast.makeText(MainActivity.this, "Welcome, "+ c.getString(c.getColumnIndex("display_name")), Toast.LENGTH_SHORT).show();
+            c.close();
+        } catch (Exception e) {
+            mPlayerName = "Unknown";
+        }
+
         //get server address
         askForServerAddress();
         //enter lobby with these details
